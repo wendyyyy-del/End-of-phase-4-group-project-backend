@@ -1,23 +1,20 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from models.review import Review, db
-from models.movie import Movie
+from server.models import Review, Movie, db
+
 
 review_bp = Blueprint('review_bp', __name__)
 
-# GET all reviews for a movie
 @review_bp.route('/<int:movie_id>/reviews', methods=['GET'])
 def get_reviews(movie_id):
     reviews = Review.query.filter_by(movie_id=movie_id).all()
     return jsonify([r.to_dict() for r in reviews]), 200
 
-# POST a new review for a movie
 @review_bp.route('/<int:movie_id>/reviews', methods=['POST'])
 @jwt_required()
 def create_review(movie_id):
     data = request.get_json()
 
-    # Confirm movie exists
     movie = Movie.query.get(movie_id)
     if not movie:
         return jsonify({'error': 'Movie not found'}), 404
