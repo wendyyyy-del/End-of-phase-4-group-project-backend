@@ -1,5 +1,5 @@
 from flask import Flask 
-from flask_sqalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy  
 from flask_migrate import Migrate 
 from flask_jwt_extended import JWTManager 
 from flask_cors import CORS 
@@ -23,9 +23,10 @@ def create_app():
 
     from .routes.auth_routes import auth_bp
     from .routes.movie_routes import movie_bp
+    from .routes.review_routes import review_bp
 
-   app.register_blueprint(auth_bp, url_prefix='/api/auth')
-   app.register_blueprint(movie_bp, url_prefix='/api/movies')
+    app.register_blueprint(review_bp, url_prefix='/api/movies')
+    app.register_blueprint(auth_bp, url_prefix='/api/auth')
+    app.register_blueprint(movie_bp, url_prefix='/api/movies')
 
-   return app
-    
+    return app
